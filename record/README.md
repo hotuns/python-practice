@@ -1,6 +1,7 @@
 # python 爬虫
 
 ## urllib
+
 - 包含模块
     - urllib.requiest: 打开读取urls
     - urllib.error: 包含request产生的常见错误. 使用try捕捉
@@ -58,4 +59,50 @@
 
 
 
+## cookie & session
+
+- 由于http协议的无记忆性，人们为了弥补，采用的一个补充协议
+- cookie是发放给用户（http浏览器）的一段信息， session是保存在服务器上对应的另一半信息，用来记录用户信息
+- 区别：
+  - 存放位置不同
+  - cookie不安全
+  - session会保存在服务器上一段时间
+  - 单个cookie保存数据不超过4k，很多浏览器限制一个站点最多保存20个
+- session的存放位置
+  - 存在服务器端
+  - 一般情况，session是放在内存或者数据库中
+- 使用cookie登录
+  - 直接把cookie复制下来
+  - http模块包含关于cookie的模块，通过他们可以自动使用cookie
+    - CookieJar
+      - 管理存储cookie，向http请求添加cookie。
+      - cookie存在内存中CookieJar实例回收后cookie消失
+    - FileCookieJar(filename, delayload=None, policy=None)
+      - 使用文件管理cookie
+    - MozillaCookieJar(filename, delayload=None, policy=None)
+      - 创建mocilla浏览器cookie.text兼容的FileCookieJar 实例
+    - LwpCookieJar(filename, delayload=None, policy=None)
+      - 创建于libwww-pel标准兼容的Set-Cookie3 格式的FileCookieJar实例
+- 流程
+  - 打开登录页面后自动通过用户名密码登录
+  - 自动提取反馈回来的cookie
+  - 利用提取的cookie登录隐私页面
+- **案例`v6.py`**
+
+
+
+## SSL（https）
+
+- SSL证书，就是指蹲守SSL安全套阶层协议的服务器证书
+- 美国网景公司开发
+- CA 是数字证书认证中心，是 发放、管理、废除数字证书的收信人的第三方机构
+
+
+
+
+
+## js加密
+
+- 有的反爬虫策略采用js对需要传输的数据进行加密（通常取md5值）
+- 经过加密，传输的就是密文。但是加密过程（函数）是在浏览器完成的，也就是一定会把代码暴露给使用者，可以通过阅读加密算法，模拟过程，从而达到破解。
 - 
