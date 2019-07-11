@@ -1,3 +1,7 @@
+[TOC]
+
+
+
 # python 爬虫
 
 ## urllib
@@ -105,4 +109,153 @@
 
 - 有的反爬虫策略采用js对需要传输的数据进行加密（通常取md5值）
 - 经过加密，传输的就是密文。但是加密过程（函数）是在浏览器完成的，也就是一定会把代码暴露给使用者，可以通过阅读加密算法，模拟过程，从而达到破解。
-- 
+- **案例(有道翻译)`v7.py`**
+
+
+
+## ajax
+
+- 异步请求
+- 一般使用json格式
+
+
+
+## Requests模块
+
+- 更简洁，更友好
+- 继承了urllib的所有特征
+- 底层使用的是urllib3
+- [中文文档](https://2.python-requests.org//zh_CN/latest/)
+
+### proxy
+
+- 代理
+
+```python
+
+proxies = {
+    'http': 'xxxxx',
+    'https': 'xxxxxxx'
+}
+
+res = requests.get(url, proxies=proxies)
+```
+
+代理可能会报错，如果使用的人数太多，可能会强行关闭
+
+- 用户验证
+
+  - 代理验证
+
+    可能需要使用 HTTP basic Auth
+
+    格式为： 用户名:密码@代理地址:端口
+
+    ```python
+    proxy = {'http': 'china:123@192.168.1.1:8888'}
+    res = requests.get(url, proxies=proxy)
+    ```
+
+- web客户端验证
+
+  - 如果遇到web客户端验证，需要添加auth
+
+    ```python
+    auth = ('username', 'password')
+    res = requests.get(url, auth=auth
+    ```
+
+- cookie
+
+  - requests 可以自动处理cookie
+
+    ```python
+    res = requests.get(url)
+    
+    cookiejar = res. cookies
+    
+    # 转成字典
+    cookiedict = requests.utils.dict_from_cookiejar(cookiejar)
+    ```
+
+- session
+
+  - 跟服务器端session不是一个东西
+
+  - 模拟一次对话
+
+  - 能让我们跨请求的时候保持某些参数，比如同一个session实例发出的所有请求都保持cookie
+
+    ```
+    ss = requsts.session()
+    
+    headers = {'xx': 'xx'}
+    
+    data = {'t': 's'}
+    
+    ss.post(url, data=data, headers=headers)
+    
+    ss.get(url)
+    ```
+
+- https 请求验证ssl证书
+
+  - 参数verify负责表示是否需要验证ssl证书，默认是true
+
+    ```python
+    res = requests.get(url, verify=False)
+    ```
+
+    
+
+
+
+
+
+## 页面解析和数据获取
+
+- 结构数据： 现有结构，再谈数据
+  - JSON文件
+    - JSON Path
+    - 转换成Python类型
+  - XML文件
+    - 转换成Python类型
+    - Xpan
+    - 正则
+- 非结构化数据： 现有数据，再谈结构
+  - 电话号码
+  - 普通文本信息
+  - **通常使用正则表达式来处理此类数据**
+
+
+
+## 正则表达式
+
+- 常用：
+  - math： 从开始位置开始查找，一次匹配
+  - search： 从任何位置开始查找，一次匹配
+  - findall：全部匹配，返回列表
+  - finditer： 全部匹配，返回迭代器
+  - split： 分割字符串，返回列表
+  - sub：替换
+  - **案例`v10.py`**
+
+
+
+
+
+## 动态HTML
+
+### Selenium + Chromedriver
+
+- selenium：web自动化测试工具
+  - 自动加载页面
+  - 获取数据
+  - 截屏
+- chromedriver
+  - chrome无界面的浏览器
+- selenium操作主要分两类
+  - 得到ui元素：
+    - find_element_by_id
+    - find_elements_by_name
+
