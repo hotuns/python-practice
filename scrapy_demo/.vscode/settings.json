@@ -1,6 +1,0 @@
-{
-    "python.pythonPath": "/usr/local/opt/python/bin/python3.7",
-    "python.autoComplete.extraPaths": [
-        "/Users/hds/Documents/python学习/爬虫/scrapy_demo/scrapydemo/lib/python3.7/site-packages/"
-    ],
-}
