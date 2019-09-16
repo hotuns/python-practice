@@ -1,6 +1,0 @@
-{
-    "python.pythonPath": "/Library/Frameworks/Python.framework/Versions/3.7/bin/python3",
-    "python.autoComplete.extraPaths": [
-        "/Users/hds/Documents/python学习/爬虫/demo/pydemo/lib/python3.7/site-packages"
-    ]
-}
