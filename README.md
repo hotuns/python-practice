@@ -6,8 +6,7 @@
 
 ---
 * [getDate](https://github.com/hedongshu/python-practice/getDate) 
-    
-把文件夹内的所有文件名(还有文件内的字段),从时间戳格式修改成人类可读的格式
+    把文件夹内的所有文件名(还有文件内的字段),从时间戳格式修改成人类可读的格式
 
 
 * [updateREADME](https://github.com/hedongshu/python-practice/updateREADME) 
