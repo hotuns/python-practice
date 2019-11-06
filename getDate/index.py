@@ -26,6 +26,7 @@ class Application(Frame):
         self.v = IntVar()
         self.createWidgets()
         self.root_path = ''
+        self.infotext = '------开始------\n当前路径: ' + self.root_path + '\n'
 
     def createWidgets(self):
         self.lab1 = Label(self, text='目标路径:')
@@ -52,35 +53,41 @@ class Application(Frame):
             self.path.set('您没有选择任何文件')
 
     def main(self):
+        self.infotext = '-------开始-------\n当前路径: ' + self.root_path + '\n'
 
-        infotext = '当前路径: ' + self.root_path
-        self.lab2.grid(row=2, columnspan=3, sticky=N+S)
-        self.info.set(infotext)
+        self.lab2.grid(row=2, columnspan=3)
+        self.info.set(self.infotext)
 
         for i in os.listdir(self.root_path):
-            if not i == 'getdate.py':
-                if os.path.isfile(os.path.join(self.root_path, i)) == True:
-                    if i.find('.jpg') > 0 or i.find('.JPG') > 0 or i.find('.PNG') > 0 or i.find('.png') > 0:
+            if os.path.isfile(os.path.join(self.root_path, i)) == True:
+                if i.find('.jpg') > 0 or i.find('.JPG') > 0 or i.find('.PNG') > 0 or i.find('.png') > 0:
+                    if re.match('[0-9]{8}', i):
                         index = i.find('.')
                         extName = i[index+1:]
                         oldName = i[0:index]
                         oldName = oldName.ljust(10, "0")  # 补齐十位
                         # newname = datetime.fromtimestamp(
-                        #     int(oldName)).strftime("%Y-%m-%d %H:%M")
-                        newname = str(datetime.fromtimestamp(
-                            int(oldName)))
+                        #     int(oldName)).strftime("%Y-%m-%d_%H/%M/%S")
+                        # newname = str(datetime.fromtimestamp(
+                        #     int(oldName)))
 
                         os.rename(os.path.join(self.root_path, i),
                                   os.path.join(self.root_path, newname+'.'+extName))
 
+                        self.infotext += '\n------图片处理------'
                         thetxt = '\n {} -> {}.{}'.format(i, newname, extName)
-                        infotext += thetxt
-                        self.info.set(infotext)
-                    elif self.v.get() == 1 and i.find('.TXT') > 0 or i.find('.txt') > 0:
-                        filepath = os.path.join(self.root_path, i)
-                        self.edit(filepath)
+                        self.infotext += thetxt
+                        self.info.set(self.infotext)
+                    else:
+                        self.infotext += '\n没有需要转换的图片'
+                        self.info.set(self.infotext)
+                elif self.v.get() == 1 and i.find('.TXT') > 0 or i.find('.txt') > 0:
+                    filepath = os.path.join(self.root_path, i)
+                    self.edit(filepath)
 
     def edit(self, path):
+        self.infotext += '\n------TXT处理------\n'
+        self.info.set(self.infotext)
         datalist = []
 
         with open(path, 'r+') as f:
@@ -89,23 +96,33 @@ class Application(Frame):
 
             for i in l:
                 print('当前行', i)
-                data = json.loads(i)
-                pack = json.dumps(data['package'])
-                timetamp = re.search(r'"([0-9]+)"', pack).group(1)
-                newname = datetime.fromtimestamp(
-                    int(timetamp)).strftime("%Y-%m-%d %H:%M:%S")
-                newData = re.sub(timetamp, newname, pack)
+                if(re.search(r'([0-9]{10})', i)):
+                    timetamp = re.search(r'([0-9]{10})', i).group(1)
 
-                data['package'] = newData
-                datalist.append(data)
+                    newname = datetime.fromtimestamp(
+                        int(timetamp)).strftime("%Y-%m-%d %H:%M:%S")
+                    newData = re.sub(timetamp, newname, i)
+                    datalist.append(newData)
 
+                    # data = json.loads(i)
+                    # pack = json.dumps(data['package'])
+                    # timetamp = re.search(r'"([0-9]+)"', pack).group(1)
+                    # newname = datetime.fromtimestamp(
+                    #     int(timetamp)).strftime("%Y-%m-%d %H:%M:%S")
+                    # newData = re.sub(timetamp, newname, pack)
+
+                    # data['package'] = newData
+                    # datalist.append(data)
+                else:
+                    self.infotext += 'TXT文件没有需要转换的内容'
+                    self.info.set(self.infotext)
         with open(path, 'w+') as f:
             for i in datalist:
                 text = json.dumps(i)
                 f.write(str(i) + '\r')
-            thetxt = '\n {} done'.format(path)
-            infotext += thetxt
-            self.info.set(infotext)
+            thetxt = '\n 文件:::{} 处理完成'.format(path)
+            self.infotext += thetxt
+            self.info.set(self.infotext)
 
 
 app = Application()
